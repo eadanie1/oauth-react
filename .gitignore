@@ -1,0 +1,9 @@
+*.env
+*.env.development
+*.rest
+*.cert
+*.key
+backend/node_modules
+frontend/node_modules
+frontend/src/constants/envVariables.js
+frontend/src/assets/generateCerts.cjs
