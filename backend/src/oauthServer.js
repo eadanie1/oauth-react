@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import querystring from 'querystring';
 import SSE from 'express-sse';
+import { tryCatch } from './global-logic/tryCatch.js';
 
 const app = express();
 app.use(express.json(), cors());
@@ -15,55 +16,60 @@ const scope = 'openid%20profile%20w_member_social%20email';
 const stateStore = new Map();
 const sse = new SSE();
 
-app.get('/auth/linkedin', (req, res) => {
-  const state = Math.random().toString(36).substr(2, 9);
-  stateStore.set(state, true);
-
-  const redirectUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID_LINKEDIN}&redirect_uri=${REDIRECT_URI}&state=${state}&scope=${scope}
-  `;
-  res.json({ redirectUrl });
-});
-
-app.get('/auth/linkedin/callback', async (req, res) => {
-  const code = req.query.code;
-  const state = req.query.state;
-
-  try {
-    if (!state || !stateStore.get(state)) {
-      throw new Error('Invalid state parameter');
+app.get(
+  '/auth/linkedin', 
+  tryCatch(
+    (req, res) => {
+    const state = Math.random().toString(36).substr(2, 9);
+    stateStore.set(state, true);
+  
+    const redirectUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID_LINKEDIN}&redirect_uri=${REDIRECT_URI}&state=${state}&scope=${scope}
+    `;
+    res.json({ redirectUrl });
     }
-    stateStore.delete(state);
+  )
+);
 
-    const data = querystring.stringify({
-      grant_type: 'authorization_code',
-      code: code,
-      client_id: CLIENT_ID_LINKEDIN,
-      client_secret: CLIENT_SECRET_LINKEDIN,
-      redirect_uri: REDIRECT_URI
-    });
-
-    const tokenResponse = await axios.post('https://www.linkedin.com/oauth/v2/accessToken', data, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+app.get(
+  '/auth/linkedin/callback', 
+  tryCatch(
+    async (req, res) => {
+    const code = req.query.code;
+    const state = req.query.state;
+  
+      if (!state || !stateStore.get(state)) {
+        throw new Error('Invalid state parameter');
       }
-    });
-
-    const accessToken = tokenResponse.data.access_token;
-
-    const profileResponse = await axios.get('https://api.linkedin.com/v2/userinfo', { 
-      headers: { 'Authorization': `Bearer ${accessToken}` } 
-    });
-
-    const profileData = profileResponse.data;
-
-    sse.send({ type: 'linkedinUserData', userData: profileData });
-
-    res.json({ type: 'linkedinUserData', userData: profileData });
-  } catch (error) {
-    console.error('OAuth callback failed:', error.message);
-    res.status(500).send(`OAuth callback failed: ${error.message}`);
-  }
-});
+      stateStore.delete(state);
+  
+      const data = querystring.stringify({
+        grant_type: 'authorization_code',
+        code: code,
+        client_id: CLIENT_ID_LINKEDIN,
+        client_secret: CLIENT_SECRET_LINKEDIN,
+        redirect_uri: REDIRECT_URI
+      });
+  
+      const tokenResponse = await axios.post('https://www.linkedin.com/oauth/v2/accessToken', data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+  
+      const accessToken = tokenResponse.data.access_token;
+  
+      const profileResponse = await axios.get('https://api.linkedin.com/v2/userinfo', { 
+        headers: { 'Authorization': `Bearer ${accessToken}` } 
+      });
+  
+      const profileData = profileResponse.data;
+  
+      sse.send({ type: 'linkedinUserData', userData: profileData });
+  
+      res.json({ type: 'linkedinUserData', userData: profileData });
+    }
+  )
+);
 
 app.get('/subscribe', sse.init);
 
