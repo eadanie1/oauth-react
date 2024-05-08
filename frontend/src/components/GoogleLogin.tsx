@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { VITE_GOOGLE_CLIENT_ID } from "../constants/envVariables";
-
-interface UserData {
-  id: string;
-  name: string;
-  picture: string;
-  credential: string;
-}
+import { UserData } from "types/UserData";
 
 function Google() {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -39,10 +33,16 @@ function Google() {
       callback: handleCallbackResponse,
     });
 
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-    });
+    const signInDiv = document.getElementById("signInDiv");
+
+    if (signInDiv) {
+      signInDiv.addEventListener("click", () => {});
+
+      google.accounts.id.renderButton(signInDiv, {
+        theme: "outline",
+        size: "large",
+      });
+    }
   }, []);
 
   return (

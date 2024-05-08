@@ -12,10 +12,8 @@
   "dependencies": {
     "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",
-    "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "jwt-decode": "^4.0.0",
-    "postcss": "^8.4.38",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
@@ -31,7 +29,6 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "dotenv-webpack": "^8.1.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
