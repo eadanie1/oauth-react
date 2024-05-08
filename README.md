@@ -1,7 +1,3 @@
-Got it, let's combine both frontend and backend descriptions into one README. Here's the updated version:
-
----
-
 # OAuth Authentication with React Frontend and Node.js Backend
 
 This project provides OAuth authentication with Facebook, Google, and LinkedIn using a React frontend and a Node.js backend.
@@ -121,7 +117,3 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Adjust the repository URL and other details as necessary. Let me know if you need further modifications!
