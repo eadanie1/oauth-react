@@ -8,6 +8,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["./src/constants", "./node_modules/@types"],
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

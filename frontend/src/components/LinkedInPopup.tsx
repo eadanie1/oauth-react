@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 const EventSource = window.EventSource;
+import { UserData } from "types/UserData";
 import signInLinkedin from "../assets/signInLinkedin.png";
 
 function LinkedIn() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const popupRef = useRef<Window | null>(null);
 
   useEffect(() => {
@@ -44,7 +45,6 @@ function LinkedIn() {
         alert("Popup blocked! Please enable popups and try again.");
         return;
       }
-      document.getElementById("linkedin-login-button").hidden = true;
 
       popupRef.current = popup;
     } catch (error) {
@@ -54,13 +54,20 @@ function LinkedIn() {
 
   useEffect(() => {
     if (userData && popupRef.current) {
+      const loginButton = document.getElementById("linkedin-login-button");
+      if (loginButton) {
+        loginButton.hidden = true;
+      }
       popupRef.current.close();
     }
   }, [userData]);
 
   function handleSignOut() {
     setUserData(null);
-    document.getElementById("linkedin-login-button").hidden = false;
+    const loginButton = document.getElementById("linkedin-login-button");
+    if (loginButton) {
+      loginButton.hidden = false;
+    }
   }
 
   return (
