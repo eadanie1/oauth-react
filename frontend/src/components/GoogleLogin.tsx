@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { VITE_GOOGLE_CLIENT_ID } from "../constants/envVariables";
-function Google() {
-  const [userData, setUserData] = useState({});
 
-  function handleCallbackResponse(response) {
+interface UserData {
+  id: string;
+  name: string;
+  picture: string;
+  credential: string;
+}
+
+function Google() {
+  const [userData, setUserData] = useState<UserData | {}>({});
+
+  function handleCallbackResponse(response: UserData) {
     const userObject = jwtDecode(response.credential);
     setUserData(userObject);
     document.getElementById("signInDiv").hidden = true;
@@ -36,7 +44,7 @@ function Google() {
           <button
             id="signOutButton"
             style={{ margin: "10px", borderRadius: "8px" }}
-            onClick={(event) => handleSignOut(event)}
+            onClick={handleSignOut}
           >
             Sign out from Google
           </button>

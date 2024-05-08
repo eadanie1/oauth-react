@@ -5,7 +5,7 @@ import signInLinkedin from "../assets/signInLinkedin.png";
 
 function LinkedIn() {
   const [userData, setUserData] = useState(null);
-  const popupRef = useRef(null);
+  const popupRef = useRef<Window | null>(null);
 
   useEffect(() => {
     const eventSource = new EventSource("http://localhost:3000/subscribe");
@@ -82,7 +82,7 @@ function LinkedIn() {
           <button
             id="signOutButton"
             style={{ margin: "10px", borderRadius: "8px" }}
-            onClick={(event) => handleSignOut(event)}
+            onClick={handleSignOut}
           >
             Sign out from LinkedIn
           </button>

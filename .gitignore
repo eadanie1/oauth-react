@@ -5,5 +5,6 @@
 *.key
 backend/node_modules
 frontend/node_modules
-frontend/src/constants/envVariables.js
+frontend/src/constants/envVariables.ts
+frontend/src/constants/envVariables.d.ts
 frontend/src/assets/generateCerts.cjs

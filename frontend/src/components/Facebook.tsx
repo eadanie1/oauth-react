@@ -1,7 +1,17 @@
-import { LoginSocialFacebook } from "reactjs-social-login";
+import { LoginSocialFacebook, FacebookResponse } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import { VITE_FB_APP_ID } from "../constants/envVariables";
 import { useState } from "react";
+
+interface UserData {
+  id: string;
+  name: string;
+  picture: {
+    data: {
+      url: string;
+    };
+  };
+}
 
 const Facebook = () => {
   const [userData, setUserData] = useState(null);
@@ -16,11 +26,11 @@ const Facebook = () => {
       {!userData ? (
         <LoginSocialFacebook
           appId={VITE_FB_APP_ID}
-          onResolve={(response) => {
+          onResolve={(response: FacebookResponse<UserData>) => {
             console.log(response);
             setUserData(response.data);
           }}
-          onReject={(error) => {
+          onReject={(error: Error) => {
             console.log(error);
           }}
         >
@@ -34,7 +44,7 @@ const Facebook = () => {
           <button
             id="signOutButton"
             style={{ margin: "10px", borderRadius: "8px" }}
-            onClick={(event) => handleSignOut(event)}
+            onClick={handleSignOut}
           >
             Sign out from Facebook
           </button>
