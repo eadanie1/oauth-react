@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { VITE_GOOGLE_CLIENT_ID } from "../constants/envVariables";
 import { UserData } from "types/UserData";
 
 function Google() {
@@ -9,6 +8,7 @@ function Google() {
   function handleCallbackResponse(response: UserData) {
     const userObject: UserData = jwtDecode(response.credential);
     setUserData(userObject);
+
     const signInDiv = document.getElementById("signInDiv");
     if (signInDiv) {
       signInDiv.hidden = true;
@@ -29,7 +29,7 @@ function Google() {
 
   useEffect(() => {
     google.accounts.id.initialize({
-      client_id: VITE_GOOGLE_CLIENT_ID,
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       callback: handleCallbackResponse,
     });
 

@@ -1,6 +1,5 @@
 import { LoginSocialFacebook, FacebookResponse } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
-import { VITE_FB_APP_ID } from "../constants/envVariables";
 import { useState } from "react";
 import { UserDataFacebook } from "types/UserDataFacebook";
 
@@ -19,7 +18,7 @@ const Facebook = () => {
     <>
       {!userData ? (
         <LoginSocialFacebook
-          appId={VITE_FB_APP_ID}
+          appId={import.meta.env.VITE_FB_APP_ID}
           onResolve={(response: FacebookResponse<UserDataFacebook>) => {
             console.log(response);
             setUserData(response.data);
